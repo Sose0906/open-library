@@ -1,0 +1,14 @@
+body
+{
+    font-family: monospace;
+}
+.book
+{
+
+    margin-top: 20px;
+    margin-left: 20px;
+}
+.book img
+{
+    max-width: 120px;
+}
