@@ -1,8 +1,11 @@
 const searchInput = document.getElementById('search');
 const booksContent = document.getElementById('main-content');
+const loader = document.getElementsByClassName('loader')[0];
 searchInput.oninput = debounce(searchBook, 1000);
 
 function searchBook(e) {
+    loader.style.display = 'block';
+    console.log(loader);
     booksContent.innerHTML = '';
     let value = searchInput.value;
     if (value) {
@@ -11,7 +14,7 @@ function searchBook(e) {
                 return response.json()
             })
             .then(function (result) {
-
+                loader.style.display = 'none';
                 if (result && result.items && result.items.length) {
                     result.items.forEach(item => makeElement(item.volumeInfo));
                 } else {
@@ -21,9 +24,12 @@ function searchBook(e) {
 
 
             }).catch(error => {
+            loader.style.display = 'none';
             console.log(error);
         });
 
+    } else {
+        loader.style.display = 'none';
     }
 
 
