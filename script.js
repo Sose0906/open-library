@@ -2,14 +2,23 @@ const searchInput = document.getElementById('search');
 const booksContent = document.getElementById('main-content');
 const loader = document.getElementsByClassName('loader')[0];
 searchInput.oninput = debounce(searchBook, 1000);
+let START_INDEX = 0;
+
 
 function searchBook(e) {
     loader.style.display = 'block';
-    console.log(loader);
     booksContent.innerHTML = '';
     let value = searchInput.value;
+    START_INDEX = 0;
+    fetchCall(value, START_INDEX)
+
+
+}
+
+function fetchCall(value, startIndex = 0) {
+
     if (value) {
-        fetch(`https://www.googleapis.com/books/v1/volumes?q=${value}&key=AIzaSyDt-j6pr_6qPeiN4qZ5pkyWbs5J5vc-_f0`)
+        fetch(`https://www.googleapis.com/books/v1/volumes?q=${value}&key=AIzaSyDt-j6pr_6qPeiN4qZ5pkyWbs5J5vc-_f0&startIndex=${startIndex}`)
             .then(function (response) {
                 return response.json()
             })
@@ -31,8 +40,6 @@ function searchBook(e) {
     } else {
         loader.style.display = 'none';
     }
-
-
 }
 
 function makeElement(obj) {
@@ -56,4 +63,18 @@ function debounce(func, ms) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, arguments), ms);
     };
+}
+
+
+window.onscroll = function () {
+    myFunction()
+};
+
+function myFunction() {
+
+    if (window.scrollY + window.innerHeight > document.body.offsetHeight - 200) {
+        START_INDEX += 10;
+        let value = searchInput.value;
+        fetchCall(value, START_INDEX)
+    }
 }
